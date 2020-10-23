@@ -10,10 +10,12 @@ from joblib import Parallel, delayed
 from autoreject import get_rejection_threshold
 
 import library as lib
+import config as cfg
 
 
-def get_subjects_list(kind):
-    df = pd.read_csv("/home/parietal/hjanati/data/camcan/age.csv")
+def get_all_subjects(kind):
+    df = pd.read_csv("/storage/store/work/hjanati/datasets/data"
+                     "/camcan/age.csv")
     all_subjects = list(df.Observations)
     subjects = []
     for subject in all_subjects:
@@ -223,10 +225,11 @@ def _run_all(subject, kind):
     out.update(result)
     return out
 
+
 for kind in ["passive", "task"]:
 
-    subjects = get_subjects_list("camcan", age_min=0, age_max=100,
-                                 raw_only=True)
+    subjects = cfg.get_subjects_list("camcan", age_min=0, age_max=100,
+                                     raw_only=True)
     out = Parallel(n_jobs=60)(delayed(_run_all)(subject=subject, kind=kind)
                               for subject in subjects)
     out_df = pd.DataFrame(out)
