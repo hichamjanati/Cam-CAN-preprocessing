@@ -130,7 +130,7 @@ def get_fwd_fname(dataset_name, subject, resolution="ico4"):
     return path
 
 
-def get_subjects_list(dataset_name, age_min=0, age_max=30, raw_only=False,
+def get_subjects_list(dataset_name, age_min=0, age_max=100, raw_only=False,
                       ave_only=False):
     if os.path.exists("/home/parietal/"):
         if dataset_name == "camcan":
