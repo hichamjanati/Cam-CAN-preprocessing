@@ -5,6 +5,8 @@ import numpy as np
 import mne
 from mne.parallel import parallel_func
 
+from mne_bids import get_entity_vals
+
 import config as cfg
 
 
@@ -22,18 +24,27 @@ def compute_fwd(subject, src_ref, info, trans_fname, bem_fname,
     return fwd
 
 
-dataset_name = "camcan"
 delete_all = False
-save_dir = "/storage/store/work/hjanati/datasets/%s/leadfields" \
-    % dataset_name
+save_dir = "./derivatives/leadfields"
 subfolders = ["ico"]
 
+BIDS_ROOT = "/storage/store/data/camcan/BIDSsep/passive"
+kind = "passive"  # can be "smt"
+
 age_max = 30
-n_subjects = 20
-subjects_dir = cfg.get_subjects_dir(dataset_name)
-subjects = cfg.get_subjects_list(dataset_name, 0, age_max)[:n_subjects]
+n_subjects = 3
+# n_subjects = 20
+# subjects_dir = cfg.get_subjects_dir(dataset_name)
+subjects_dir = '/storage/store/data/camcan-mne/freesurfer'
+
+# subjects = cfg.get_subjects_list(dataset_name, 0, age_max)[:n_subjects]
+
+subjects = get_entity_vals(BIDS_ROOT, entity_key='subject')
+subjects = subjects[:n_subjects]  # take one only
+
 os.environ['SUBJECTS_DIR'] = subjects_dir
 
+dataset_name = 'camcan'
 trans_fnames = [cfg.get_trans_fname(dataset_name, subject)
                 for subject in subjects]
 raw_fnames = [cfg.get_raw_fname(dataset_name, subject)

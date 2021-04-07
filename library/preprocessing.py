@@ -4,15 +4,12 @@ import mne
 _curr_dir = op.dirname(op.realpath(__file__))
 
 
-def run_maxfilter(raw, coord_frame='head'):
+def run_maxfilter(raw, calibration, cross_talk, coord_frame='head'):
     """Run maxfilter."""
 
-    cal = op.join(_curr_dir, 'sss_params', 'sss_cal.dat')
-    ctc = op.join(_curr_dir, 'sss_params', 'ct_sparse.fif')
-
     raw = mne.preprocessing.maxwell_filter(
-        raw, calibration=cal,
-        cross_talk=ctc,
+        raw, calibration=calibration,
+        cross_talk=cross_talk,
         st_duration=10.,
         st_correlation=.98,
         coord_frame=coord_frame)
