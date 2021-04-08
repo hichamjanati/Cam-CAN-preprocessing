@@ -28,13 +28,24 @@ delete_all = False
 save_dir = "./derivatives/leadfields"
 subfolders = ["ico"]
 
-BIDS_ROOT = "/storage/store/data/camcan/BIDSsep/passive"
+username = os.environ.get('USER')
+if "hashemi" in username:
+    BIDS_ROOT = "/datasabzi/data/CamCAN_old/cc700/mri/pipeline/release004/BIDSsep/megraw_passive"
+else:
+    BIDS_ROOT = "/storage/store/data/camcan/BIDSsep/passive"
+
 kind = "passive"  # can be "smt"
 
 age_max = 30
 n_subjects = 3
 # n_subjects = 20
 # subjects_dir = cfg.get_subjects_dir(dataset_name)
+username = os.environ.get('USER')
+if "hashemi" in username:
+    subjects_dir = '/datasabzi/hashemi/freesurfer/subjects/'
+else:
+    subjects_dir = '/storage/store/data/camcan-mne/freesurfer'
+
 subjects_dir = '/storage/store/data/camcan-mne/freesurfer'
 
 # subjects = cfg.get_subjects_list(dataset_name, 0, age_max)[:n_subjects]
