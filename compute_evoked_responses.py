@@ -17,14 +17,27 @@ from autoreject import get_rejection_threshold
 import library as lib
 import config as cfg
 
-AGE_FNAME = "/storage/store/work/hjanati/datasets/data/camcan/age.csv"
+username = os.environ.get('USER')
+if "hashemi" in username:
+    AGE_FNAME = "/datasabzi/hashemi/Cam-CAN-preprocessing/age.csv"
+else:
+    AGE_FNAME = "/storage/store/work/hjanati/datasets/data/camcan/age.csv"
 
-mne_camcan_freesurfer_path = (
-    '/storage/store/data/camcan-mne/freesurfer')
+username = os.environ.get('USER')
+if "hashemi" in username:
+    mne_camcan_freesurfer_path = (
+        '/storage/store/data/camcan-mne/freesurfer')
+else:
+    mne_camcan_freesurfer_path = (
+        'datasabzi/hashemi/freesurfer/subjects/')
 
 derivative_path = './derivatives/'
 
-BIDS_ROOT = "/storage/store/data/camcan/BIDSsep/passive"
+if "hashemi" in username:
+    BIDS_ROOT = "/datasabzi/data/CamCAN_old/cc700/mri/pipeline/release004/BIDSsep/megraw_passive"
+else:
+    BIDS_ROOT = "/storage/store/data/camcan/BIDSsep/passive"
+    
 kind = "passive"  # can be "smt"
 N_JOBS = 1
 
