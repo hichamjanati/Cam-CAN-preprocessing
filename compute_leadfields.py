@@ -46,8 +46,6 @@ if "hashemi" in username:
 else:
     subjects_dir = '/storage/store/data/camcan-mne/freesurfer'
 
-subjects_dir = '/storage/store/data/camcan-mne/freesurfer'
-
 # subjects = cfg.get_subjects_list(dataset_name, 0, age_max)[:n_subjects]
 
 subjects = get_entity_vals(BIDS_ROOT, entity_key='subject')
