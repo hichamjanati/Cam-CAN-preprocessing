@@ -34,7 +34,7 @@ else:
 derivative_path = './derivatives/'
 
 if "hashemi" in username:
-    BIDS_ROOT = "/datasabzi/data/CamCAN_old/cc700/mri/pipeline/release004/BIDSsep/megraw_passive"
+    BIDS_ROOT = "/datasabzi/data/CamCAN_feb21/BIDSsep/passive"
 else:
     BIDS_ROOT = "/storage/store/data/camcan/BIDSsep/passive"
     

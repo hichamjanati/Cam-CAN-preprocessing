@@ -104,9 +104,9 @@ def get_raw_fname(dataset_name, subject, task_type="passive"):
     username = os.environ.get('USER')
     if "hashemi" in username:
         if dataset_name == "camcan":
-            path = "/datasabzi/data/CamCAN_old/cc700/mri/pipeline/release004/BIDSsep"
-            path += "/megraw_passive/sub-%s/meg/%s_raw.fif" % (
-                subject, task_type)
+            path = "/datasabzi/data/CamCAN_feb21/BIDSsep"
+            path += "/%s/sub-%s/ses-%s/meg/sub-%s_ses-%s_task-%s_meg.fif" % (
+                task_type, subject, task_type, subject, task_type, task_type)
             # path += "%s_raw.fif" % task_type
         elif dataset_name == "ds117":
             path = "/storage/store/work/agramfort/mne-biomag-group-demo/"

@@ -1,3 +1,4 @@
+# %%
 import os
 
 import numpy as np
@@ -30,7 +31,7 @@ subfolders = ["ico"]
 
 username = os.environ.get('USER')
 if "hashemi" in username:
-    BIDS_ROOT = "/datasabzi/data/CamCAN_old/cc700/mri/pipeline/release004/BIDSsep/megraw_passive"
+    BIDS_ROOT = "/datasabzi/data/CamCAN_feb21/BIDSsep/passive"
 else:
     BIDS_ROOT = "/storage/store/data/camcan/BIDSsep/passive"
 
@@ -42,7 +43,7 @@ n_subjects = 3
 # subjects_dir = cfg.get_subjects_dir(dataset_name)
 username = os.environ.get('USER')
 if "hashemi" in username:
-    subjects_dir = '/datasabzi/hashemi/freesurfer/subjects/'
+    subjects_dir = '/datasabzi/hashemi/freesurfer/subjects'
 else:
     subjects_dir = '/storage/store/data/camcan-mne/freesurfer'
 
@@ -72,7 +73,7 @@ src_ref = mne.setup_source_space(subject="fsaverage",
 n_jobs = n_subjects
 parallel, run_func, _ = parallel_func(compute_fwd, n_jobs=n_jobs)
 
-
+# %%
 fwds = parallel(run_func(s, src_ref, raw, trans, bem)
                 for s, trans, raw, bem in zip(subjects, trans_fnames,
                                               raw_fnames, bem_fnames))
@@ -87,3 +88,5 @@ for sub, fwd in zip(subjects, fwds):
     lead_fname = os.path.join(save_dir, "%s-ldf.npy" % sub)
     mne.write_forward_solution(fwd_fname, fwd)
     np.save(lead_fname, leadfield_matrix)
+
+# %%
