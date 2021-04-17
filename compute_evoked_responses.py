@@ -214,7 +214,7 @@ def _run_all(subject, kind):
 # %%
 
 subjects = get_entity_vals(BIDS_ROOT, entity_key='subject')
-subjects = subjects[:3]  # take one only
+subjects = subjects[4:15]  # take one only
 out = Parallel(n_jobs=N_JOBS)(delayed(_run_all)(subject=subject, kind=kind)
                                 for subject in subjects)
 out_df = pd.DataFrame(out)

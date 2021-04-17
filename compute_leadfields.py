@@ -59,7 +59,7 @@ trans_fnames = [cfg.get_trans_fname(dataset_name, subject)
                 for subject in subjects]
 raw_fnames = [cfg.get_raw_fname(dataset_name, subject)
               for subject in subjects]
-
+# %%
 bem_fnames = [cfg.get_bem_fname(dataset_name, subject)
               for subject in subjects]
 resolution = 4
