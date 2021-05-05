@@ -4,7 +4,7 @@ from joblib import Parallel, delayed
 
 # the paths to Freesurfer reconstructions
 DATA_PATH = '/datasabzi/anuja/freesurfer'
-SUBJECT_DIR = DATA_PATH + '/subjects'
+SUBJECTS_DIR = DATA_PATH + '/subjects'
 
 def generate_bem(subject, subject_dir):
     """
