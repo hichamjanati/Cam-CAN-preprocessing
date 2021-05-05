@@ -6,7 +6,7 @@ from joblib import Parallel, delayed
 DATA_PATH = '/datasabzi/anuja/freesurfer'
 SUBJECTS_DIR = DATA_PATH + '/subjects'
 
-def generate_bem(subject, subject_dir):
+def generate_bem(subject, subjects_dir):
     """
     Creates BEM surfaces using the FreeSurfer watershed algorithm for the given subject.
     """
