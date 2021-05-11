@@ -48,7 +48,7 @@ save_dir = "./derivatives/leadfields"
 subfolders = ["ico"]
 
 username = os.environ.get('USER')
-if "hashemi" in username:
+if "hashemi" or "anuja" in username:
     BIDS_ROOT = "/datasabzi/data/CamCAN_feb21/BIDSsep/passive"
 else:
     BIDS_ROOT = "/storage/store/data/camcan/BIDSsep/passive"
@@ -60,7 +60,7 @@ n_subjects = 3
 # n_subjects = 20
 # subjects_dir = cfg.get_subjects_dir(dataset_name)
 username = os.environ.get('USER')
-if "hashemi" in username:
+if "hashemi" or "anuja" in username:
     subjects_dir = '/datasabzi/results/CamCAN_feb21/freesurfer_bem/subjects'
 else:
     subjects_dir = '/storage/store/data/camcan-mne/freesurfer'
