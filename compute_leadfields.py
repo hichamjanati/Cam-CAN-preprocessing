@@ -10,6 +10,24 @@ from mne_bids import get_entity_vals
 
 import config as cfg
 
+def compute_fwd(subject, src_ref, info, trans_fname, bem_fname,
+                meg=True, eeg=True, mindist=3, subjects_dir=None,
+                n_jobs=1, verbose=None):
+    src = mne.morph_source_spaces(src_ref, subject_to=subject,
+                                verbose=verbose,
+                                subjects_dir=subjects_dir)
+    conductivity = (0.3, 0.006, 0.3) # for three layers
+    model = mne.make_bem_model(subject=subject, ico=4,
+                                conductivity=conductivity,
+                                subjects_dir=subjects_dir)
+    bem = mne.make_bem_solution(model)
+    # bem = mne.read_bem_solution(bem_fname, verbose=verbose)
+    fwd = mne.make_forward_solution(info, trans=trans_fname, src=src,
+                                    bem=bem, meg=meg, eeg=eeg,
+                                    mindist=mindist, verbose=verbose,
+                                    n_jobs=n_jobs)
+    return fwd
+
 
 def compute_fwd(subject, src_ref, info, trans_fname, bem_fname,
                 meg=True, eeg=True, mindist=3, subjects_dir=None,

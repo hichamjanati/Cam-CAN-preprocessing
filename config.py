@@ -81,7 +81,7 @@ def get_bem_fname(dataset_name, subject):
     username = os.environ.get('USER')
     if "hashemi" in username:
         if dataset_name == "camcan":
-            path = "/datasabzi/results/CamCAN_apr21/freesurfer_bem/subjects/"
+            path = "/datasabzi/results/CamCAN_feb21/freesurfer_bem/subjects/"
             path += "%s/bem/%s-head.fif" % (subject, subject)
         elif dataset_name == "ds117":
             path = "/storage/store/work/agramfort/mne-biomag-group-demo/"
