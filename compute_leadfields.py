@@ -29,18 +29,18 @@ def compute_fwd(subject, src_ref, info, trans_fname, bem_fname,
     return fwd
 
 
-def compute_fwd(subject, src_ref, info, trans_fname, bem_fname,
-                meg=True, eeg=True, mindist=3, subjects_dir=None,
-                n_jobs=1, verbose=None):
-    src = mne.morph_source_spaces(src_ref, subject_to=subject,
-                                  verbose=verbose,
-                                  subjects_dir=subjects_dir)
-    bem = mne.read_bem_solution(bem_fname, verbose=verbose)
-    fwd = mne.make_forward_solution(info, trans=trans_fname, src=src,
-                                    bem=bem, meg=meg, eeg=eeg,
-                                    mindist=mindist, verbose=verbose,
-                                    n_jobs=n_jobs)
-    return fwd
+# def compute_fwd(subject, src_ref, info, trans_fname, bem_fname,
+#                 meg=True, eeg=True, mindist=3, subjects_dir=None,
+#                 n_jobs=1, verbose=None):
+#     src = mne.morph_source_spaces(src_ref, subject_to=subject,
+#                                   verbose=verbose,
+#                                   subjects_dir=subjects_dir)
+#     bem = mne.read_bem_solution(bem_fname, verbose=verbose)
+#     fwd = mne.make_forward_solution(info, trans=trans_fname, src=src,
+#                                     bem=bem, meg=meg, eeg=eeg,
+#                                     mindist=mindist, verbose=verbose,
+#                                     n_jobs=n_jobs)
+#     return fwd
 
 
 delete_all = False
@@ -61,7 +61,7 @@ n_subjects = 3
 # subjects_dir = cfg.get_subjects_dir(dataset_name)
 username = os.environ.get('USER')
 if "hashemi" in username:
-    subjects_dir = '/datasabzi/hashemi/freesurfer/subjects'
+    subjects_dir = '/datasabzi/results/CamCAN_feb21/freesurfer_bem/subjects'
 else:
     subjects_dir = '/storage/store/data/camcan-mne/freesurfer'
 
