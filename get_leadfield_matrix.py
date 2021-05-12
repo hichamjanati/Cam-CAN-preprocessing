@@ -13,34 +13,37 @@ def get_leadfield_matrix(subject, subjects_dir, trans, raw_fname, save_dir=PATH_
     """
     Makes forward solution and gets the leadfield matrix for the given subject.
     """
-    src = mne.setup_source_space(subject, spacing='oct4', add_dist='patch',
+    try:
+        src = mne.setup_source_space(subject, spacing='oct4', add_dist='patch',
+                                    subjects_dir=subjects_dir)
+
+        # conductivity = (0.3,)  # for single layer
+        conductivity = (0.3, 0.006, 0.3)  # for three layers
+        model = mne.make_bem_model(subject=subject, ico=4,
+                                conductivity=conductivity,
                                 subjects_dir=subjects_dir)
+        bem = mne.make_bem_solution(model)
+        fwd = mne.make_forward_solution(raw_fname, trans=trans, src=src, bem=bem,
+                                        meg=True, eeg=False, mindist=5.0, n_jobs=1,
+                                        verbose=True)
+        fwd = mne.convert_forward_solution(fwd, surf_ori=True, force_fixed=True, use_cps=True, verbose=True)
 
-    # conductivity = (0.3,)  # for single layer
-    conductivity = (0.3, 0.006, 0.3)  # for three layers
-    model = mne.make_bem_model(subject=subject, ico=4,
-                            conductivity=conductivity,
-                            subjects_dir=subjects_dir)
-    bem = mne.make_bem_solution(model)
-    fwd = mne.make_forward_solution(raw_fname, trans=trans, src=src, bem=bem,
-                                    meg=True, eeg=False, mindist=5.0, n_jobs=1,
-                                    verbose=True)
-    fwd = mne.convert_forward_solution(fwd, surf_ori=True, force_fixed=True, use_cps=True, verbose=True)
+        leadfield_matrix = fwd["sol"]["data"]
 
-    leadfield_matrix = fwd["sol"]["data"]
+        if save:
+            path = os.path.join(save_dir, subject)
+            if not os.path.exists(path):
+                os.makedirs(path)
+            fwd_fname = os.path.join(path, "%s-fwd.fif" % subject)
+            lead_fname = os.path.join(path, "%s-ldf.npy" % subject)
+            mne.write_forward_solution(fwd_fname, fwd, overwrite=True)
+            np.save(lead_fname, leadfield_matrix)
+        
+        else:
+            return fwd, leadfield_matrix
 
-    if save:
-        path = os.path.join(save_dir, subject)
-        if not os.path.exists(path):
-            os.makedirs(path)
-        fwd_fname = os.path.join(path, "%s-fwd.fif" % subject)
-        lead_fname = os.path.join(path, "%s-ldf.npy" % subject)
-        mne.write_forward_solution(fwd_fname, fwd, overwrite=True)
-        np.save(lead_fname, leadfield_matrix)
-    
-    else:
-        return fwd, leadfield_matrix
-
+    except:
+        pass
 
 if __name__ == "__main__":
     SUBJECTS_TRAIN = ['CC120008', 'CC110033', 'CC110101', 'CC110187', 'CC110411', 'CC110606', 'CC112141', 'CC120049', 'CC120061', 'CC120120']  
