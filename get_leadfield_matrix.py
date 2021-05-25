@@ -14,7 +14,7 @@ def get_leadfield_matrix(subject, subjects_dir, trans, raw_fname, save_dir=PATH_
     Makes forward solution and gets the leadfield matrix for the given subject.
     """
     try:
-        src = mne.setup_source_space(subject, spacing='oct4', add_dist='patch',
+        src = mne.setup_source_space(subject, spacing='ico4', add_dist=False,
                                     subjects_dir=subjects_dir)
 
         # conductivity = (0.3,)  # for single layer
