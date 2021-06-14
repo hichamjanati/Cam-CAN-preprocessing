@@ -9,14 +9,12 @@ DATA_PATH = '/datasabzi/anuja/freesurfer'
 SUBJECTS_DIR = DATA_PATH + '/subjects'
 PATH_TO_SAVE_LEADFIELDS = '/datasabzi/anuja/leadfields'
 
-def get_leadfield_matrix(subject, subjects_dir, trans, raw_fname, save_dir=PATH_TO_SAVE_LEADFIELDS, save=True):
+def get_leadfield_matrix(subject, subjects_dir, src_ref, trans, raw_fname, save_dir=PATH_TO_SAVE_LEADFIELDS, save=True):
     """
     Makes forward solution and gets the leadfield matrix for the given subject.
     """
     try:
-        src = mne.setup_source_space(subject, spacing='ico4', add_dist=False,
-                                    subjects_dir=subjects_dir)
-
+        src = mne.morph_source_spaces(src_ref, subject_to=subject, verbose=None, subjects_dir=subjects_dir)
         # conductivity = (0.3,)  # for single layer
         conductivity = (0.3, 0.006, 0.3)  # for three layers
         model = mne.make_bem_model(subject=subject, ico=4,
@@ -53,4 +51,6 @@ if __name__ == "__main__":
     get_trans = lambda subject: '/datasabzi/anuja/trans-files/trans/sub-%s-trans.fif'%(subject)
     get_raw_fname = lambda subject: '/datasabzi/data/CamCAN_feb21/BIDSsep/passive/sub-%s/ses-passive/meg/sub-%s_ses-passive_task-passive_meg.fif'%(subject, subject)
 
-    Parallel(n_jobs=25)(delayed(get_leadfield_matrix)(subject, SUBJECTS_DIR, get_trans(subject), get_raw_fname(subject)) for subject in SUBJECTS)
+    src_ref = mne.setup_source_space(subject="fsaverage", spacing='ico4', subjects_dir=SUBJECTS_DIR, add_dist=False)
+
+    Parallel(n_jobs=25)(delayed(get_leadfield_matrix)(subject, SUBJECTS_DIR, src_ref, get_trans(subject), get_raw_fname(subject)) for subject in SUBJECTS)
