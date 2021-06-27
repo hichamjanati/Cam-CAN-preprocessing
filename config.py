@@ -10,7 +10,7 @@ exclude_subjects = dict(camcan=["CC220352"],
 
 def get_params(dataset):
     username = os.environ.get('USER')
-    if "hashemi" and "anuja" in username:
+    if ("hashemi" in username) or ("anuja" in username):
         subjects_dir = get_subjects_dir(dataset)
         data_path = "~/data/%s/" % dataset
         data_path = op.expanduser(data_path)
@@ -41,7 +41,7 @@ def get_params(dataset):
 
 def get_subjects_dir(dataset):
     username = os.environ.get('USER')
-    if "hashemi" or "anuja" in username:
+    if ("hashemi" in username) or ("anuja" in username):
         subjects_dir = '/datasabzi/hashemi/freesurfer/subjects/'
     elif os.path.exists("/home/parietal/"):
         if dataset == "camcan":
@@ -61,13 +61,14 @@ def get_subjects_dir(dataset):
 
 def get_trans_fname(dataset_name, subject):
     username = os.environ.get('USER')
-    if "hashemi" or "anuja" in username:
+    if ("hashemi" in username) or ("anuja" in username):
         if dataset_name == "camcan":
             path = "/datasabzi/hashemi/trans-files/trans"
             path += "sub-%s-trans.fif" % subject
     elif os.path.exists("/home/parietal/"):
         if dataset_name == "camcan":
-            path = "/storage/store/data/camcan-mne/trans/"
+            # path = "/storage/store/data/camcan-mne/trans/"
+            path = "/storage/store/data/camcan-mne/trans-halifax/"
             path += "sub-%s-trans.fif" % subject
         elif dataset_name == "ds117":
             path = "/storage/store/work/agramfort/mne-biomag-group-demo/"
@@ -79,7 +80,7 @@ def get_trans_fname(dataset_name, subject):
 
 def get_bem_fname(dataset_name, subject):
     username = os.environ.get('USER')
-    if "hashemi" or "anuja" in username:
+    if ("hashemi" in username) or ("anuja" in username):
         if dataset_name == "camcan":
             path = "/datasabzi/results/CamCAN_feb21/freesurfer_bem/subjects/"
             path += "%s/bem/%s-head.fif" % (subject, subject)
@@ -101,7 +102,7 @@ def get_bem_fname(dataset_name, subject):
 
 def get_raw_fname(dataset_name, subject, task_type="passive"):
     username = os.environ.get('USER')
-    if "hashemi" or "anuja" in username:
+    if ("hashemi" in username) or ("anuja" in username):
         if dataset_name == "camcan":
             path = "/datasabzi/data/CamCAN_feb21/BIDSsep"
             path += "/%s/sub-%s/ses-%s/meg/sub-%s_ses-%s_task-%s_meg.fif" % (
@@ -171,7 +172,7 @@ def get_fwd_fname(dataset_name, subject, resolution="ico4"):
 def get_subjects_list(dataset_name, age_min=0, age_max=100, raw_only=False,
                       ave_only=False):
     username = os.environ.get('USER')
-    if "hashemi" or "anuja" in username:
+    if ("hashemi" in username) or ("anuja" in username):
         if dataset_name == "camcan":
             df = pd.read_csv("/datasabzi/hashemi/Cam-CAN-preprocessing/age.csv")
             path = "/datasabzi/hashemi/trans-files/trans"
@@ -215,7 +216,8 @@ def get_subjects_list(dataset_name, age_min=0, age_max=100, raw_only=False,
         if dataset_name == "camcan":
             df = pd.read_csv("/storage/store/work/hjanati/datasets/data"
                              "/camcan/age.csv")
-            path = "/storage/store/data/camcan-mne/trans/"
+            # path = "/storage/store/data/camcan-mne/trans/"
+            path = "/storage/store/data/camcan-mne/trans-halifax/"
             df = df[(df.age < age_max) & (df.age > age_min)]
             all_subjects = list(df.Observations)
             subjects = []
