@@ -9,7 +9,14 @@ exclude_subjects = dict(camcan=["CC220352"],
 
 
 def get_params(dataset):
-    if os.path.exists("/home/parietal/"):
+    username = os.environ.get('USER')
+    if ("hashemi" in username) or ("anuja" in username):
+        subjects_dir = get_subjects_dir(dataset)
+        data_path = "~/data/%s/" % dataset
+        data_path = op.expanduser(data_path)
+        subject = get_subjects_list(dataset)[0]
+        info_fname = get_raw_fname(dataset, subject)
+    elif os.path.exists("/home/parietal/"):
         subjects_dir = get_subjects_dir(dataset)
         data_path = "~/data/%s/" % dataset
         data_path = op.expanduser(data_path)
@@ -33,7 +40,10 @@ def get_params(dataset):
 
 
 def get_subjects_dir(dataset):
-    if os.path.exists("/home/parietal/"):
+    username = os.environ.get('USER')
+    if ("hashemi" in username) or ("anuja" in username):
+        subjects_dir = '/datasabzi/hashemi/freesurfer/subjects/'
+    elif os.path.exists("/home/parietal/"):
         if dataset == "camcan":
             subjects_dir = "/storage/store/data/camcan-mne/freesurfer/"
         elif dataset == "ds117":
@@ -50,41 +60,70 @@ def get_subjects_dir(dataset):
 
 
 def get_trans_fname(dataset_name, subject):
-    if dataset_name == "camcan":
-        path = "/storage/store/data/camcan-mne/trans/"
-        path += "sub-%s-trans.fif" % subject
-    elif dataset_name == "ds117":
-        path = "/storage/store/work/agramfort/mne-biomag-group-demo/"
-        path += "ds117/%s/MEG/%s-trans.fif" % (subject, subject)
-    else:
-        raise ValueError("Unknown dataset %s." % dataset_name)
+    username = os.environ.get('USER')
+    if ("hashemi" in username) or ("anuja" in username):
+        if dataset_name == "camcan":
+            path = "/datasabzi/hashemi/trans-files/trans"
+            path += "sub-%s-trans.fif" % subject
+    elif os.path.exists("/home/parietal/"):
+        if dataset_name == "camcan":
+            # path = "/storage/store/data/camcan-mne/trans/"
+            path = "/storage/store/data/camcan-mne/trans-halifax/"
+            path += "sub-%s-trans.fif" % subject
+        elif dataset_name == "ds117":
+            path = "/storage/store/work/agramfort/mne-biomag-group-demo/"
+            path += "ds117/%s/MEG/%s-trans.fif" % (subject, subject)
+        else:
+            raise ValueError("Unknown dataset %s." % dataset_name)
 
     return path
-
 
 def get_bem_fname(dataset_name, subject):
-    if dataset_name == "camcan":
-        path = "/storage/store/data/camcan-mne/freesurfer/"
-        path += "%s/bem/%s-meg-bem.fif" % (subject, subject)
-    elif dataset_name == "ds117":
-        path = "/storage/store/work/agramfort/mne-biomag-group-demo/"
-        path += "subjects/%s/bem/%s-5120-bem-sol.fif" % (subject, subject)
+    username = os.environ.get('USER')
+    if ("hashemi" in username) or ("anuja" in username):
+        if dataset_name == "camcan":
+            path = "/datasabzi/results/CamCAN_feb21/freesurfer_bem/subjects/"
+            path += "%s/bem/%s-head.fif" % (subject, subject)
+        elif dataset_name == "ds117":
+            path = "/storage/store/work/agramfort/mne-biomag-group-demo/"
+            path += "subjects/%s/bem/%s-5120-bem-sol.fif" % (subject, subject)
+        else:
+            raise ValueError("Unknown dataset %s." % dataset_name)
     else:
-        raise ValueError("Unknown dataset %s." % dataset_name)
+        if dataset_name == "camcan":
+            path = "/storage/store/data/camcan-mne/freesurfer/"
+            path += "%s/bem/%s-meg-bem.fif" % (subject, subject)
+        elif dataset_name == "ds117":
+            path = "/storage/store/work/agramfort/mne-biomag-group-demo/"
+            path += "subjects/%s/bem/%s-5120-bem-sol.fif" % (subject, subject)
+        else:
+            raise ValueError("Unknown dataset %s." % dataset_name)
     return path
 
-
 def get_raw_fname(dataset_name, subject, task_type="passive"):
-    if dataset_name == "camcan":
-        path = "/storage/store/data/camcan/camcan47/cc700/meg/pipeline/"
-        path += "release004/data/aamod_meg_get_fif_00001/%s/%s/" % (subject,
-                                                                    task_type)
-        path += "%s_raw.fif" % task_type
-    elif dataset_name == "ds117":
-        path = "/storage/store/work/agramfort/mne-biomag-group-demo/"
-        path += "ds117/%s/MEG/run_01_raw.fif" % subject
+    username = os.environ.get('USER')
+    if ("hashemi" in username) or ("anuja" in username):
+        if dataset_name == "camcan":
+            path = "/datasabzi/data/CamCAN_feb21/BIDSsep"
+            path += "/%s/sub-%s/ses-%s/meg/sub-%s_ses-%s_task-%s_meg.fif" % (
+                task_type, subject, task_type, subject, task_type, task_type)
+            # path += "%s_raw.fif" % task_type
+        elif dataset_name == "ds117":
+            path = "/storage/store/work/agramfort/mne-biomag-group-demo/"
+            path += "ds117/%s/MEG/run_01_raw.fif" % subject
+        else:
+            raise ValueError("Unknown dataset %s." % dataset_name)
     else:
-        raise ValueError("Unknown dataset %s." % dataset_name)
+        if dataset_name == "camcan":
+            path = "/storage/store/data/camcan/camcan47/cc700/meg/pipeline/"
+            path += "release004/data/aamod_meg_get_fif_00001/%s/%s/" % (subject,
+                                                                        task_type)
+            path += "%s_raw.fif" % task_type
+        elif dataset_name == "ds117":
+            path = "/storage/store/work/agramfort/mne-biomag-group-demo/"
+            path += "ds117/%s/MEG/run_01_raw.fif" % subject
+        else:
+            raise ValueError("Unknown dataset %s." % dataset_name)
     return path
 
 
@@ -132,11 +171,53 @@ def get_fwd_fname(dataset_name, subject, resolution="ico4"):
 
 def get_subjects_list(dataset_name, age_min=0, age_max=100, raw_only=False,
                       ave_only=False):
-    if os.path.exists("/home/parietal/"):
+    username = os.environ.get('USER')
+    if ("hashemi" in username) or ("anuja" in username):
+        if dataset_name == "camcan":
+            df = pd.read_csv("/datasabzi/hashemi/Cam-CAN-preprocessing/age.csv")
+            path = "/datasabzi/hashemi/trans-files/trans"
+            df = df[(df.age < age_max) & (df.age > age_min)]
+            all_subjects = list(df.Observations)
+            subjects = []
+            for subject in all_subjects:
+                fname0 = get_raw_fname(dataset_name, subject)
+                check0 = os.path.exists(fname0)
+                if raw_only and check0:
+                    subjects.append(subject)
+                    continue
+                fname4 = get_ave_fname(dataset_name, subject)
+                check4 = os.path.exists(fname4)
+                if ave_only and check4:
+                    subjects.append(subject)
+                    continue
+                fname1 = get_bem_fname(dataset_name, subject)
+                fname2 = path + "../freesurfer/%s/surf/lh.white" % subject
+                fname3 = get_trans_fname(dataset_name, subject)
+                check1 = os.path.exists(fname1)
+                check2 = os.path.exists(fname2)
+                check3 = os.path.exists(fname3)
+                check5 = subject not in exclude_subjects[dataset_name]
+
+                if check1 * check2 * check3 * check0 * check4 * check5:
+                    subjects.append(subject)
+
+        elif dataset_name == "ds117":
+            subjects = ["sub%03d" % i for i in range(1, 20)
+                        if "sub%03d" % i not in exclude_subjects[dataset_name]]
+        else:
+            raise ValueError("Unknown dataset %s." % dataset_name)
+        fname = "/storage/store/work/hjanati/datasets/data/%s/info/"\
+            % dataset_name
+        fname += "subjects.list"
+        f = open(fname, "wb")
+        pickle.dump(subjects, f)
+
+    elif os.path.exists("/home/parietal/"):
         if dataset_name == "camcan":
             df = pd.read_csv("/storage/store/work/hjanati/datasets/data"
                              "/camcan/age.csv")
-            path = "/storage/store/data/camcan-mne/trans/"
+            # path = "/storage/store/data/camcan-mne/trans/"
+            path = "/storage/store/data/camcan-mne/trans-halifax/"
             df = df[(df.age < age_max) & (df.age > age_min)]
             all_subjects = list(df.Observations)
             subjects = []
